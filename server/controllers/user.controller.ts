@@ -7,6 +7,8 @@ import { CatchAsyncError } from "../middleware/catchAsyncErrors";
 import jwt, { Secret } from "jsonwebtoken";
 import path from "path";
 import sendMail from "../utils/sendMail";
+import { redis } from "../utils/redis";
+import {sendToken} from '../utils/jwt';
 // register user
 interface IRegistrationBody {
     name:string,
@@ -90,13 +92,58 @@ export const activateUser = CatchAsyncError(async(req:Request , res:Response, ne
             return next(new ErrorHandler("Email aready exist",400));
         }
         const user = await userModel.create({
-            name,email,password
+            name,
+            email,
+            password
         });
         res.status(200).json({
             success:true,
             message:"Register success"
         })
     } catch (error:any) {
-        return next(new ErrorHandler(error.message,200))
+        return next(new ErrorHandler(error.message,400))
+    }
+})
+
+// Login user
+interface IloginRequest {
+    email:string,
+    password:string
+}
+
+export const loginUser = CatchAsyncError(async(req:Request , res:Response,next:NextFunction)=> {
+    try {
+        const {email,password} = req.body as IloginRequest;
+        if(!email || !password) {
+            return next(new ErrorHandler("Please enter email and password",400));
+        }
+        const user = await userModel.findOne({email}).select("+password");
+        if(!user) {
+            return next(new ErrorHandler("Invalid email or password",400));
+        }
+
+        const isPasswordMath = await user.comparePassword(password);
+        if(!isPasswordMath) {
+            return next(new ErrorHandler("Invalid email or password",400));
+        }
+        sendToken(user,200,res);
+    } catch (error:any) {
+        return next(new ErrorHandler(error.message,400))
+    }
+}) 
+
+// logout
+
+export const logoutUser = CatchAsyncError(async(req:Request , res:Response , next:NextFunction) => {
+    try {
+        res.cookie("access_token","",{maxAge:1})
+        res.cookie("refresh_token","",{maxAge:1})
+        res.status(200).json({
+            success:true,
+            message:"Logged out successfully"
+        });
+
+    } catch (error:any) {
+        return next(new ErrorHandler(error.message,400))
     }
 })
