@@ -49,9 +49,7 @@ export const editCourse = CatchAsyncError(async(req:Request,res:Response,next:Ne
             $set: data},
             {new : true}
         );
-        console.log('====================================');
-        console.log("course: " , course);
-        console.log('====================================');
+        
         res.status(200).json({
             success:true,
             course

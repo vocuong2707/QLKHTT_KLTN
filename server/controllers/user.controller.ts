@@ -343,3 +343,10 @@ export const updateProfilePicture = CatchAsyncError(async(req:Request,res:Respon
 
     }
 })
+
+// get single course
+
+export const getSingleCourse = CatchAsyncError(async(req:Request , res:Response , next : NextFunction) => {
+    
+})
+
