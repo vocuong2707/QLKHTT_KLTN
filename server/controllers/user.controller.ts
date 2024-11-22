@@ -343,6 +343,3 @@ export const updateProfilePicture = CatchAsyncError(async(req:Request,res:Respon
 
     }
 })
-
-
-
