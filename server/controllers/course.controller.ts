@@ -5,6 +5,7 @@ import cloudinary from "cloudinary"
 import { createCourse } from "../services/course.service";
 import { url } from "inspector";
 import CourseModel from "../models/source.model";
+import { redis } from "../utils/redis";
 
 
 export const uploadCourse = CatchAsyncError(async(req:Request , res:Response,next:NextFunction)=> {
@@ -49,9 +50,7 @@ export const editCourse = CatchAsyncError(async(req:Request,res:Response,next:Ne
             $set: data},
             {new : true}
         );
-        console.log('====================================');
-        console.log("course: " , course);
-        console.log('====================================');
+        
         res.status(200).json({
             success:true,
             course
@@ -59,5 +58,83 @@ export const editCourse = CatchAsyncError(async(req:Request,res:Response,next:Ne
     } catch (error : any) {
         return next(new ErrorHandler(error.message,500));
 
+    }
+})
+
+
+// get single course ---- with purchasing
+
+export const getSingleCourse = CatchAsyncError(async(req:Request , res:Response, next:NextFunction)=> {
+    try {
+        const courseId = req.params.id;
+        const isCacheExist = await redis.get(courseId);
+        if(isCacheExist) {
+            const course = JSON.parse(isCacheExist);
+            res.status(200).json({
+                success:true,
+                course
+            })
+        }
+       else {
+        const course = await CourseModel.findById(req.params.id).select("-courseData.videoUrl -courseData.suggestion -courseData.question -courseData.links");
+        res.status(200).json({
+            success:true,
+            course
+        })
+        await redis.set(courseId,JSON.stringify(course))
+       }
+    } catch (error:any) {
+        return next(new ErrorHandler(error.message,500))
+    }
+})
+
+// get all course
+export const getAllCourse = CatchAsyncError(async(req:Request,res:Response,next:NextFunction)=> {
+    try {
+        const isCacheExist = await redis.get("allCourses");
+
+        if(isCacheExist) {
+            const course = JSON.parse(isCacheExist);
+            res.status(200).json({
+                success:true,
+                course
+            })
+        }
+        else {
+            const courses = await CourseModel.find().select("-courseData.videoUrl -courseData.suggestion -courseData.question -courseData.links");
+            await redis.set("allCourses",JSON.stringify(courses))
+            res.status(200).json({
+                success:true,
+                courses
+            });
+        }
+    } catch (error:any) {
+        return next(new ErrorHandler(error.message,500))
+
+    }
+})
+
+
+// get course content -- only for valid user
+export const getCourseByUser = CatchAsyncError(async(req:Request, res:Response,next: NextFunction)=> {
+    try {
+        const userCourseList = req.user?.courses;
+        const courseId = req.params.id;
+        const courseExists = userCourseList?.find((course:any)=>course._id.toString() === courseId);
+
+        console.log('====================================');
+        console.log(courseId);
+        console.log('====================================');
+        if(!courseExists) {
+            return next(new ErrorHandler("You are not eligible to access this course",404))
+        }
+        const course = await CourseModel.findById(courseId);
+        const content = course?.courseData;
+        res.status(200).json({
+            success : true,
+            content
+        })
+    } catch (error) {
+        
     }
 })
