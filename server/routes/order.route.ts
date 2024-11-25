@@ -1,8 +1,9 @@
 import express from "express";
-import { isAutheticated } from "../middleware/auth";
-import { createOrder } from "../controllers/order.controller";
+import { authorizaRoles, isAutheticated } from "../middleware/auth";
+import { createOrder, getAllOrder } from "../controllers/order.controller";
 const orderRouter = express.Router();
 
 orderRouter.post("/create-order",isAutheticated,createOrder);
+orderRouter.get("/get-orders",isAutheticated,authorizaRoles("admin"),getAllOrder);
 
 export default orderRouter;

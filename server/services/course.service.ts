@@ -9,3 +9,12 @@ export const createCourse = CatchAsyncError(async(data:any , res:Response , next
         course
     })
 })
+
+// Get All users --- only admin
+export const getAllCoursesService = async(res:Response)=>{
+    const courses = await CourseModel.find().sort({createAt:-1});
+    res.status(201).json({
+        success:true,
+        courses
+    })
+};

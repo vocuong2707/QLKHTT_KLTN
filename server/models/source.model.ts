@@ -95,7 +95,7 @@ const courseDataSchema = new Schema<ICourceData>({
     link:[linkSchema],
     questions:[commentSchema],
     suggestion:String
-});
+},{timestamps:true});
 
 
 const courseSchema = new Schema<ICourse>({
@@ -150,7 +150,7 @@ const courseSchema = new Schema<ICourse>({
         type: Number,
         default:1
     }
-})
+},{timestamps:true})
 
 const CourseModel : Model<ICourse> = mongoose.model("Course",courseSchema);
 export default CourseModel;
