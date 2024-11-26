@@ -1,56 +1,105 @@
 'use client'
 import React, { FC, useState, useEffect } from 'react';
 import Image from 'next/image';
-import avatarIcon from "../../../public/asstes/avatar.jpg";
+import avatarIcon from "../../../public/asstes/avatar.png";
 import { AiOutlineCamera } from 'react-icons/ai';
 import { Style } from "../../style/stylelogin";
-import { useUpdateAvatarMutation } from '@/redux/features/user/userApi';
-import { useLoadUserQuery } from '@/redux/features/api/apiSlice';
+import { useEditProfileMutation, useUpdateAvatarMutation } from '@/redux/features/user/userApi';
+import { useLoadUserQuery } from '@/redux/features/api/apiSilce';
 
 type Props = {
     avatar: string | null;
     user: any;
 };
 
+
 const ProfileInfo: FC<Props> = ({ avatar, user }) => {
     const [name, setName] = useState(user && user.name);
-    // const [updatedAvatar, setUpdatedAvatar] = useState(avatar);  // Thêm state để lưu avatar mới
-    const [updateAvatar, { isSuccess, error }] = useUpdateAvatarMutation();
-    const [loadUser, setLoadUser] = useState(false);
+    const [updatedAvatar, {isSuccess, error}] = useUpdateAvatarMutation();
+    const [editProfile, {isSuccess:success, error:updateError}] = useEditProfileMutation();
+    const [localAvatar, setLocalAvatar] = useState<string | null>(null);
+    // const [loadUser, setLoadUser] = useState(false);
+    // const {} = useLoadUserQuery(undefined, {
+    //     skip: loadUser ? false : true
+    // })
+    
+    // const imageHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    //     const file = e.target.files?.[0]; // Lấy file đầu tiên
+    //     if (!file) return; // Kiểm tra nếu không có file được chọn
+    
+    //     const fileReader = new FileReader();
+    
+    //     fileReader.onload = () => {
+    //         if (fileReader.readyState === 2) {
+    //             const avatar = fileReader.result; // Base64 string
+    //             updatedAvatar(avatar); // Gửi avatar tới API
+    //         }
+    //     };
+    
+    //     fileReader.readAsDataURL(file); // Đọc file dưới dạng base64
+    // };
+    
+    //     useEffect(() => {
+    //         if(isSuccess || success){
+    //             setLoadUser(true);
+    //         }
+    //         if(error || updateError){
+    //             console.log(error)
+    //         }
+    //     },[isSuccess, error, success, updateError]);
 
-    // Khởi tạo query để load user
-    const {} = useLoadUserQuery(undefined, { skip: loadUser ? false : true });
+    // const handlerSubmit = async (e: any) => {
+    //     e.preventDefault();
+    //     if(name !== ""){{
+    //         await editProfile({
+    //             name: name,
+    //         })
+    //     }}
+    // };
 
-    // Handler cho việc tải ảnh lên
-    const imageHandler = async (e: any) => {
-        const fileReader = new FileReader();
+    const { data: userData, refetch } = useLoadUserQuery(undefined, { skip: false });
 
-        fileReader.onload = () => {
-            const avatar = fileReader.result ; // Ép kiểu về string hoặc null
-            if (fileReader.readyState === 2) {
-                // const avatar = fileReader.result as string | null; // Ép kiểu về string hoặc null
-                // Cập nhật avatar mới trong state
-                // setUpdatedAvatar(avatar);
-                updateAvatar(avatar,);
+useEffect(() => {
+    if (isSuccess || success) {
+        refetch();
+    }
+    if (error || updateError) {
+        console.error(error || updateError);
+    }
+}, [isSuccess, success, error, updateError, refetch]);
+
+const imageHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const fileReader = new FileReader();
+    fileReader.onload = async () => {
+        if (fileReader.readyState === 2) {
+            const avatar = fileReader.result as string;
+            setLocalAvatar(avatar)
+            const response = await updatedAvatar(avatar);
+            if (response?.data) {
+                refetch();
+            } else {
+                console.error("Lỗi khi cập nhật avatar");
             }
-        };
-        fileReader.readAsDataURL(e.target.files[0]);
-    };
-
-    useEffect(() => {
-        // Sau khi avatar được cập nhật thành công, gọi lại API để tải lại thông tin người dùng
-        if (isSuccess) {
-            setLoadUser(true); // Gọi lại API để tải lại thông tin người dùng mới, bao gồm avatar
         }
-        if (error) {
-            console.log(error); // Log lỗi nếu có
-        }
-    }, [isSuccess, error]);
-
-    const handlerSubmit = async (e: any) => {
-        e.preventDefault();
-        console.log('Submit');
     };
+    fileReader.readAsDataURL(file);
+};
+
+const handlerSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (name) {
+        const response = await editProfile({ name });
+        if (response?.data) {
+            refetch();
+        } else {
+            console.error("Lỗi khi cập nhật thông tin");
+        }
+    }
+};
+
 
     return (
         <>
@@ -58,15 +107,15 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
                 <div className="relative">
                     <Image
                         // src={updatedAvatar || user.avatar?.url || avatar || avatarIcon} // Dùng state updatedAvatar nếu có
-                        src={user.avatar || avatar ?  user.avatar?.url || avatar : avatarIcon} // Dùng state updatedAvatar nếu có
-                        alt="Avatar"
+                        src={localAvatar || (user.avatar?.url || avatar) || avatarIcon} // Dùng state updatedAvatar nếu có
+                        alt=""
                         width={120}
                         height={120}
                         className="w-[120px] h-[120px] cursor-pointer border-[3px] border-[#37a39a] rounded-full"
                     />
                     <input
                         type="file"
-                        name="avatar"
+                        name=""
                         id="avatar"
                         className="hidden"
                         onChange={imageHandler}
@@ -88,7 +137,7 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
                         {/* Full Name Input */}
                         <div className="w-full mb-4">
                             <label className="block text-lg font-semibold pb-2 text-gray-700 dark:text-white">
-                                Full Name
+                                Tên tài khoản
                             </label>
                             <input
                                 type="text"
@@ -102,7 +151,7 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
                         {/* Email Address Input */}
                         <div className="w-full mb-6">
                             <label className="block text-lg font-semibold pb-2 text-gray-700 dark:text-white">
-                                Email Address
+                                Email tài khoản
                             </label>
                             <input
                                 type="text"

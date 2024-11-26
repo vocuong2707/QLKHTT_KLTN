@@ -1,37 +1,40 @@
-'use client'; // Đảm bảo chính xác
 import React, { FC, useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from "yup";
 import { AiFillGithub, AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { FcGoogle } from 'react-icons/fc';
 import { Style } from '../../style/stylelogin';
-import toast from 'react-hot-toast';
 import { useLoginMutation } from '@/redux/features/auth/authApi';
+import toast from 'react-hot-toast';
 import {signIn} from "next-auth/react";
+
 
 type Props = {
     setRoute: (route: string) => void;
     setOpen: (open:boolean) => void;
-};
+}
 
 const schema = Yup.object().shape({
     email: Yup.string().email("Invalid email").required("Please enter your email!"),
     password: Yup.string().required("Please enter your password!").min(6, "Password must be at least 6 characters"),
 });
 
-const Login: FC<Props> = ({setRoute, setOpen}) => {
+
+const Login:FC<Props> = ({setRoute, setOpen }) => {
 
     const [show, setShow] = useState(false);
     const [login, {isSuccess, error}] = useLoginMutation();
-    
+
     const formik = useFormik({
         initialValues: { email: "", password: "" },
         validationSchema: schema,
         onSubmit: async ({ email, password }) => {
             await login({email, password})
+            console.log(email,password)
         },
     });
 
+    
     useEffect (() => {
         if(isSuccess) {
             toast.success("Login Successfully!");
@@ -47,7 +50,7 @@ const Login: FC<Props> = ({setRoute, setOpen}) => {
 
     const { errors, touched, values, handleChange, handleSubmit } = formik;
 
-    return (
+    return ( 
         <div className='w-full'>
             <h1 className={`${Style.title}`}>
                 Đăng nhập 
