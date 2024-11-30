@@ -385,7 +385,7 @@ export const deleteCourse = CatchAsyncError(async(req:Request,res:Response,next:
         }
 
         await course.deleteOne({id});
-        await redis.del(id);
+        await redis.del("allCourses");
         res.status(200).json({
             success:true,
             messgae:"Course deleted successfully"
