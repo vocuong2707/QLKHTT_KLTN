@@ -7,8 +7,8 @@ import { ThemeProvider } from "./Utils/theme-provider";
 import { Toaster } from "react-hot-toast";
 import { Providers } from "./Providers";
 import { SessionProvider } from "next-auth/react";
-import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
 import Loader from "./components/Loader/Loader";
+import { useLoadUserQuery } from "@/redux/features/api/apiSilce";
 
 const poppins = Poppins({
   subsets: ["latin"],

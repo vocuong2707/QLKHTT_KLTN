@@ -1,5 +1,5 @@
-import { apiSlice } from "../api/apiSlice";
-import { userLoggedIn, userLoggedOut, userRegistration } from "./authSlice"; // Đảm bảo rằng tên này đúng
+import { apiSlice } from "../api/apiSilce";
+import {  userLoggedIn, userLoggedOut, userRegistration } from "./authSilce"; // Đảm bảo rằng tên này đúng
 
 type RegistrationResponse = {
     message: string;
@@ -9,7 +9,7 @@ type RegistrationResponse = {
 type RegistrationData = {};
 
 export const authApi = apiSlice.injectEndpoints({
-    endpoints: (builder) => ({
+    endpoints: (builder) => ({ 
         // endpoints here
         register: builder.mutation<RegistrationResponse, RegistrationData>({
             query: (data) => ({
@@ -90,7 +90,8 @@ export const authApi = apiSlice.injectEndpoints({
                 }
             },
         }),
-        Logout: builder.query({
+       
+        logOut: builder.query({
             query: () => ({
                 url: "logout",
                 method: "GET",
@@ -98,16 +99,17 @@ export const authApi = apiSlice.injectEndpoints({
             }),
             async onQueryStarted(arg, { queryFulfilled, dispatch }) {
                 try {
-                    dispatch(
-                        userLoggedOut()
-                    );
+                    await queryFulfilled; // Chờ kết quả trả về từ API
+                    dispatch(userLoggedOut()); // Xóa trạng thái đăng nhập
                 } catch (error: any) {
-                    console.log(error);
+                    console.error("Error during logout:", error);
                 }
             },
         }),
+        
     }),
 });
 
 // Xuất các hook đã định nghĩa
-export const { useRegisterMutation, useActivationMutation, useLoginMutation, useSocialAuthMutation, useLogoutQuery } = authApi;
+// export const { useRegisterMutation, useActivationMutation, useLoginMutation, useSocialAuthMutation} = authApi;
+export const { useRegisterMutation, useActivationMutation, useLoginMutation, useSocialAuthMutation, useLogOutQuery } = authApi;

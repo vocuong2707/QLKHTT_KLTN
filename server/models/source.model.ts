@@ -1,16 +1,17 @@
 import mongoose, { Model, Schema } from "mongoose";
+import { IUser } from "./user.model";
 
 interface IComment extends Document {
-    user:object,
-    comment:string,
-    commentReplies : IComment[];
+    user:IUser,
+    question:string,
+    questionReplies : IComment[];
 }
 
 interface IReview extends Document {
-    user:object,
+    user:IUser,
     rating:number,
     comment : string,
-    commentReplies:IComment[]
+    commentReplies?:IComment[]
 }
 
 interface ILink extends Document {
@@ -48,6 +49,7 @@ interface ICourceData extends Document {
 interface ICourse extends Document {
     name:string,
     description:string,
+    categories:string,
     price:number,
     estimatedPrice?: number,
     thumbnail : object,
@@ -68,7 +70,8 @@ const reviewSchema = new Schema<IReview>({
         type:Number,
         default:0
     },
-    comment:String
+    comment:String,
+    commentReplies:[Object]
 });
 
 const linkSchema = new Schema<ILink>({
@@ -78,8 +81,8 @@ const linkSchema = new Schema<ILink>({
 
 const commentSchema = new Schema<IComment>({
     user:Object,
-    comment:String,
-    commentReplies: [Object],
+    question:String,
+    questionReplies: [Object],
 
 });
 
@@ -93,7 +96,7 @@ const courseDataSchema = new Schema<ICourceData>({
     link:[linkSchema],
     questions:[commentSchema],
     suggestion:String
-});
+},{timestamps:true});
 
 
 const courseSchema = new Schema<ICourse>({
@@ -102,6 +105,10 @@ const courseSchema = new Schema<ICourse>({
         required: true,
     },
     description: {
+        type:String,
+        required:true,
+    }, 
+    categories: {
         type:String,
         required:true,
     },
@@ -146,9 +153,9 @@ const courseSchema = new Schema<ICourse>({
     },
     purchased: {
         type: Number,
-        default:0
+        default:1
     }
-})
+},{timestamps:true})
 
 const CourseModel : Model<ICourse> = mongoose.model("Course",courseSchema);
 export default CourseModel;

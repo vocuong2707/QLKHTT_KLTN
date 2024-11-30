@@ -1,4 +1,5 @@
 'use client'; // Đảm bảo chính xác
+import Link from "next/link";
 import React from "react";
 
 export const navItemsData = [
@@ -21,14 +22,15 @@ const NavItems: React.FC<Props> = ({ activeItem, isMobile }) => {
             {isMobile ? (
                 <div className="md:hidden mt-5"> {/* Chỉ hiển thị khi là di động */}
                     <div className="w-full text-center py-6">
-                        <a href="/" >
-                            <span className={`text-[25px] font-Poppins font-[500] text-black dark:bg-white`}>
-                                Học trực tuyến
+                        <Link href="/" passHref>
+                        <span className={`text-[25px] font-Poppins font-[500] text-black dark:bg-white`}>
+                               Học trực tuyến
                             </span>
-                        </a>
+                            
+                        </Link>
                     </div>
-                        {navItemsData.map((item, index) => (
-                            <a href={item.url} key={index}>
+                        {navItemsData && navItemsData.map((item, index) => (
+                            <Link href={item.url} key={index}>
                                 <span 
                                     className={`${
                                         activeItem === index
@@ -38,13 +40,13 @@ const NavItems: React.FC<Props> = ({ activeItem, isMobile }) => {
                                 >
                                     {item.name}
                                 </span>
-                            </a>
+                            </Link>
                         ))}
                     </div>
             ) : (
                 <div className="hidden md:flex"> {/* Chỉ hiển thị khi không phải di động */}
-                    {navItemsData.map((item, index) => (
-                        <a href={item.url} key={index}>
+                    {navItemsData && navItemsData.map((item, index) => (
+                        <Link href={item.url} key={index}>
                             <span 
                                 className={`${
                                     activeItem === index
@@ -54,7 +56,7 @@ const NavItems: React.FC<Props> = ({ activeItem, isMobile }) => {
                             >
                                 {item.name}
                             </span>
-                        </a>
+                        </Link>
                     ))}
                 </div>
             )}
