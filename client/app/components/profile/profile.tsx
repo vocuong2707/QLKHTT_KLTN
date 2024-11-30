@@ -22,10 +22,22 @@ const Profile:FC<Props> = ({user}) => {
     });
     const[active,setActive] = useState(1);
 
+<<<<<<< HEAD
     const logOutHandler = async () =>  {
         setLogout(true);
         await signOut();
     }
+=======
+    const logOutHandler = async () => {
+        try {
+          await signOut();
+          setLogout(true);
+        } catch (err) {
+           // add anything to handle error
+          console.error("Error during logout:", err);
+        }
+      };
+>>>>>>> c95c476f1d9f25d0da395b2d851672b8df9baf5d
 
     if(typeof window !== "undefined"){
         window.addEventListener("scroll", () => {

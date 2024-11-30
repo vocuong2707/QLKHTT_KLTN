@@ -52,6 +52,12 @@ const CourseData:FC<Props> = ({
             toast.error("Pleasse fill the fiels for go to next!");
         }
 
+<<<<<<< HEAD
+=======
+        console.log(benefits)
+        console.log(prerequisites)
+
+>>>>>>> c95c476f1d9f25d0da395b2d851672b8df9baf5d
    }
 
     return ( 

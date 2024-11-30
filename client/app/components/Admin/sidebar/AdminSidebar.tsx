@@ -290,7 +290,11 @@ const Sidebar = () => {
             />
             <Item
               title="FAQ"
+<<<<<<< HEAD
               to="/faq"
+=======
+              to="/admin/faq"
+>>>>>>> c95c476f1d9f25d0da395b2d851672b8df9baf5d
               icon={<QuizIcon className="w-5 h-5" />}
               selected={selected}
               setSelected={setSelected}

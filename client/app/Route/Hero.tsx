@@ -5,10 +5,15 @@ import bannerImage from '../../public/asstes/bander1.png';
 import client1 from "../../public/asstes/client-1.jpg";
 import client2 from "../../public/asstes/client-2.jpg";
 import client3 from "../../public/asstes/client3.jpg";
+<<<<<<< HEAD
+=======
+import { useGetHeroDataQuery } from "@/redux/features/layout/layoutApi";
+>>>>>>> c95c476f1d9f25d0da395b2d851672b8df9baf5d
 
 type Props = {};
 
 const Hero: FC<Props> = (props) => {
+<<<<<<< HEAD
     return (
         <div className="hero-container flex items-center min-h-screen relative">
             <div className="container flex flex-col lg:flex-row justify-between items-center h-full px-4 lg:px-8 py-16 lg:py-32">
@@ -16,6 +21,16 @@ const Hero: FC<Props> = (props) => {
                 <div className="image-section w-full lg:w-[40%] flex justify-center items-center overflow-hidden rounded-[500px]  bg-gray-200">
           <Image
             src={bannerImage} // Replace with your hero image
+=======
+    const { data,refetch } = useGetHeroDataQuery("Banner", {});
+    return (
+        <div className="hero-container flex items-center min-h-screen relative">
+            <div className="container flex flex-col lg:flex-row justify-between items-center h-full px-4 lg:px-8 py-16 lg:py-32 ">
+                {/* Phần Hình Ảnh */}
+                <div className="image-section w-full lg:w-[40%] flex justify-center items-center overflow-hidden  hero_animation rounded-[50%] ">
+          <Image
+            src={data?.layout?.banner.image?.url} // Replace with your hero image
+>>>>>>> c95c476f1d9f25d0da395b2d851672b8df9baf5d
             alt="Hero image"
             width={1200} // Adjust width as needed
             height={800} // Adjust height as needed
@@ -28,12 +43,20 @@ const Hero: FC<Props> = (props) => {
                 {/* Phần Văn Bản */}
                 <div className="text-section lg:w-[55%] flex flex-col items-center mt-10 lg:mt-0">
                     <h1 className="dark:text-white text-[#000000c7] text-[40px] pw-3 w-full 1000px:text-[100px] font-[800] font-Josefin py-2 1000px:leading-[85px] 1500px:w-[70%]">
+<<<<<<< HEAD
                     Cải thiện trải nghiệm học tập trực tuyến của bạn tốt hơn ngay lập tức
                     </h1>
                     <br />
                     <p className="dark:text-[#edfff4] text-[#000000ac] font-Josefin font-[600] text-[24px] 1500px:!w-[55%] 1100px:!w-[78%]">
                     Chúng tôi có hơn 40k khóa học trực tuyến và hơn 500 nghìn sinh viên đăng ký trực tuyến. Tìm thấy
                     Các khóa học mong muốn của bạn từ họ
+=======
+                    {data?.layout?.banner.title}
+                    </h1>
+                    <br />
+                    <p className="dark:text-[#edfff4] text-[#000000ac] font-Josefin font-[600] text-[24px] 1500px:!w-[55%] 1100px:!w-[78%]">
+                    {data?.layout?.banner.subTitle}
+>>>>>>> c95c476f1d9f25d0da395b2d851672b8df9baf5d
                     </p>
                     <br />
                     <br />

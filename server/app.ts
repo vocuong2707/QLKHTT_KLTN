@@ -24,6 +24,7 @@ app.use(cors({
     origin:process.env.ORIGIN
 }));
 
+
 // routes
 
 app.use("/api/v1",userRouter,orderRouter,courseRouter,notificationRouter,analyticsRouter,layoutRouter);

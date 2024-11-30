@@ -178,10 +178,14 @@ export const updateAccessToken = CatchAsyncError(async(req:Request,res:Response,
         res.cookie("access_token",accessToken,accessTokenOptions)
         res.cookie("refresh_token",refreshToken,refreshTokenOptions);
         await redis.set(user._id,JSON.stringify(user),"EX",604800); // 7days
+<<<<<<< HEAD
         res.status(200).json({
             status:"success",
             accessToken
         })
+=======
+        next();
+>>>>>>> c95c476f1d9f25d0da395b2d851672b8df9baf5d
     } catch (error : any) {
         return next(new ErrorHandler(error.message,400))
     }
@@ -359,8 +363,13 @@ export const getAllUsers = CatchAsyncError(
 // / update user roles --only for admin
 export const updateUserRole = CatchAsyncError(async(req:Request,res:Response,next:NextFunction)=> {
     try {
+<<<<<<< HEAD
         const {id,role} = req.body;
         updateUserRoleService(res,id,role);
+=======
+        const {email,role} = req.body;
+        updateUserRoleService(res,email,role);
+>>>>>>> c95c476f1d9f25d0da395b2d851672b8df9baf5d
     } catch (error:any) {
         return next(new ErrorHandler(error.message,400))
     }

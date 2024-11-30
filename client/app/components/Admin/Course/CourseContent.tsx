@@ -142,6 +142,10 @@ const CourseContent:FC<Props> = ({
         }
     }
     
+<<<<<<< HEAD
+=======
+    console.log(courseContentData)
+>>>>>>> c95c476f1d9f25d0da395b2d851672b8df9baf5d
     
       return (
         <div className="w-[80%] m-auto mt-24 p-3">
@@ -247,6 +251,23 @@ const CourseContent:FC<Props> = ({
                         />
                       </div>
                       <div className="mb-3">
+<<<<<<< HEAD
+=======
+                        <label className={Style.Label}>Độ dài video (trong vài phút)</label>
+                        <input
+                          type="number"
+                          placeholder="20"
+                          className={Style.input}
+                          value={item.videoLength}
+                          onChange={(e) => {
+                            const updatedData = [...courseContentData];
+                            updatedData[index].videoLength = e.target.value;
+                            setCourseContentData(updatedData);
+                          }}
+                        />
+                      </div>
+                      <div className="mb-3">
+>>>>>>> c95c476f1d9f25d0da395b2d851672b8df9baf5d
                         <label className={Style.Label}>Mô tả video</label>
                         <textarea
                           rows={8}

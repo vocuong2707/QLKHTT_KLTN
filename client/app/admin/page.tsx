@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+"use client";
+>>>>>>> c95c476f1d9f25d0da395b2d851672b8df9baf5d
 import React from "react";
 import Heading from "../Utils/Heading";
 import AdminSidebar from "../components/Admin/sidebar/AdminSidebar";
@@ -20,7 +24,11 @@ const page = (props: Props) => {
             <AdminSidebar />
           </div>
           <div className="w-[85%] ">
+<<<<<<< HEAD
             <DashboadrHero />
+=======
+            <DashboadrHero isDashboard ={true} />
+>>>>>>> c95c476f1d9f25d0da395b2d851672b8df9baf5d
           </div>
         </div>
       </AdminProtected>

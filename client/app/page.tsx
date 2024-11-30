@@ -4,6 +4,13 @@ import React, { FC, useState } from 'react'
 import Heading from './Utils/Heading'
 import Header from "./components/Header"
 import Hero from './Route/Hero'
+<<<<<<< HEAD
+=======
+import Courses from "./components/Route/Courses"
+import Revies from "./components/Route/Revies"
+import FQA from "./components/FQA/FQA"
+import Footer from "./components/Footer"
+>>>>>>> c95c476f1d9f25d0da395b2d851672b8df9baf5d
 
 interface Props {}
 
@@ -28,6 +35,15 @@ const Page:FC<Props> = (props) => {
          route={route}
       />
       <Hero />
+<<<<<<< HEAD
+=======
+      <Courses />
+      <br />
+      <br />
+      <Revies />
+      <FQA />
+      <Footer />
+>>>>>>> c95c476f1d9f25d0da395b2d851672b8df9baf5d
         </div>
     )
 }

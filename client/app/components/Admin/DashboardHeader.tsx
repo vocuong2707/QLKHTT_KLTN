@@ -1,5 +1,6 @@
 "use client"
 import { ThemeSwitcher } from '@/app/Utils/ThemeSwitcher';
+<<<<<<< HEAD
 import React, { FC, useState } from 'react'
 import { IoMdNotificationsOutline } from 'react-icons/io';
 
@@ -10,6 +11,17 @@ const DashboardHeader:FC<Props> = (Props) => {
     const[open, setOpen] = useState(false);
 
 
+=======
+import React, { FC } from 'react'
+import { IoMdNotificationsOutline } from 'react-icons/io';
+
+type Props = {
+    open?: boolean;
+    setOpen?:any;
+};
+
+const DashboardHeader:FC<Props> = ( {open , setOpen}) => {
+>>>>>>> c95c476f1d9f25d0da395b2d851672b8df9baf5d
 
     return ( 
         <div className="w-full flex items-center justify-end p-6 fixed top-5 right-0">
@@ -34,7 +46,11 @@ const DashboardHeader:FC<Props> = (Props) => {
                         Đã nhận được câu hỏi mới
                      </p>
                         <p className="text-black dark:text-white cursor-pointer">
+<<<<<<< HEAD
                             Đánh dấu là đã đọc
+=======
+                             đã đọc
+>>>>>>> c95c476f1d9f25d0da395b2d851672b8df9baf5d
                     </p>
                     </div>
                     <p className="px-2 text-black dark:text-white">
@@ -50,7 +66,11 @@ const DashboardHeader:FC<Props> = (Props) => {
                         Đã nhận được câu hỏi mới
                      </p>
                         <p className="text-black dark:text-white cursor-pointer">
+<<<<<<< HEAD
                         Đánh dấu là đã đọc
+=======
+                         đã đọc
+>>>>>>> c95c476f1d9f25d0da395b2d851672b8df9baf5d
                     </p>
                     </div>
                     <p className="px-2 text-black dark:text-white">
